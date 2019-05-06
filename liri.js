@@ -12,8 +12,18 @@ function spotifyThis (){
         if (err) {
           return console.log('Error occurred: ' + err);
         }
+
+      //make it pretty
+      console.log("\n----------------\n")
        
-      console.log(data.tracks.items[0]); 
+      //grab artist name
+      console.log("Artist name: "+data.tracks.items[0].artists[0].name)
+
+      //grab song name 
+      console.log("Song name: "+data.tracks.items[0].name); 
+
+      //make it pretty
+      console.log("\n----------------\n")
       });
     
 }
