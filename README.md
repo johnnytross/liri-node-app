@@ -10,10 +10,10 @@
     For example, 'node liri.js spotify-this-song bam bam' will take the file, and using the switch statement will select the spotify function and input the name of the song you want to search. It will return the relevant info in the console log. 
     
     #### Search for a song using the Spotify API
-    ![How to search for a song](liri-node-app\images\spotifyTerminal1.png)
+    ![How to search for a song](\images\spotifyTerminal1.png)
     
     And now you will get the relevant info in the console log
-    ![Results](liri-node-app\images\spotifyTerminal2results.png)
+    ![Results](\images\spotifyTerminal2results.png)
 
 
 ### movie-this
