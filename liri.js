@@ -1,7 +1,16 @@
 require("dotenv").config();
 var keys = require("./keys");
 var axios = require("axios");
+var fs = require("fs");
 var Spotify = require('node-spotify-api');
+var moment = require('moment');
+moment().format();
+
+var search = process.argv[2];
+
+var term = process.argv.slice(3).join(" ");
+
+
 
 //Search Spotify for a track, and return song, album, artist and preview
 function spotifyThis (){
@@ -9,8 +18,10 @@ function spotifyThis (){
         id: keys.spotify.id,
         secret: keys.spotify.secret
       });
+
+      //If no song is provided then your program will default to "The Sign" by Ace of Base.
        
-      spotify.search({ type: 'track', query: 'All the Small Things' }, function(err, data) {
+      spotify.search({ type: 'track', query: term }, function(err, data) {
         if (err) {
           return console.log('Error occurred: ' + err);
         }
@@ -36,13 +47,15 @@ function spotifyThis (){
     
 }
 
+//for testing purposes only, replaced this with term after adding inquirer
 var movieName = "the matrix";
 
-function movieThis(){
-var queryURL = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=trilogy";
+function movieThis(term){
+var queryURL = "http://www.omdbapi.com/?t=" + term + "&y=&plot=short&apikey=trilogy";
 
     axios.get(queryURL).then(
         function(movieResponse){
+          //* If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.
             console.log("Title: " + movieResponse.data.Title);
             console.log("Year: " + movieResponse.data.Year);
             console.log("Rated: " + movieResponse.data.imdbRating);
@@ -94,23 +107,63 @@ var queryURL = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey
 var artist = "ariana grande"
 
 var getMyBands = function() {
-  var queryURL = 'https://rest.bandsintown.com/artists/' + artist + '/events?app_id=codingbootcamp';
+  var queryURL = 'https://rest.bandsintown.com/artists/' + term + '/events?app_id=codingbootcamp';
 
   axios.get(queryURL).then(
     function(response) {
       console.log('\n-----------------')
 
-      console.log(response.data[0].venue.name)
+      console.log("Artist: " + response.data[0].lineup[0])
 
-      console.log(response.data[0].venue.city + ", " + response.data[0].venue.region)
+      console.log("Venue: " + response.data[0].venue.name)
 
-        
+      console.log("City: " + response.data[0].venue.city + ", " + response.data[0].venue.region)
+
+      console.log("Date: " + moment(response.data[0].datetime).format('MM DD YYYY'))
+
+      
+
+      
+
       }
   )
 
  }
 
+ //do-what-it-says function 
+  //Using the `fs` Node package, LIRI will take the text inside of random.txt and then use it to call one of LIRI's commands.
+  fs.readFile('./random.txt', function read(err, data) {
+    if (err) {
+        throw err;
+    }
+    
+    console.log("Doing what it says!")
 
-spotifyThis()
-movieThis()
-getMyBands()
+    // Invoke the next step here however you like
+    console.log(data);   // Put all of the code here (not the best solution)
+    processFile(data);          // Or put the next step in a function and invoke it
+});
+
+function processFile(data) {
+    console.log(data);
+}
+
+
+switch (search){
+  case 'do-what-it-says': 
+    processFile(term)
+    break;
+  case 'spotify-this-song':
+    spotifyThis(term)
+    break;
+  case 'movie-this':
+    movieThis(term)
+    break;
+  case 'concert-this':
+    getMyBands(term)
+}
+
+
+
+// movieThis()
+// getMyBands()
