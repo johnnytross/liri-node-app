@@ -6,8 +6,10 @@ var Spotify = require('node-spotify-api');
 var moment = require('moment');
 moment().format();
 
+//take in the first argument the user passes
 var search = process.argv[2];
 
+//take in everything after the first argument that the user passes
 var term = process.argv.slice(3).join(" ");
 
 
@@ -20,6 +22,10 @@ function spotifyThis (){
       });
 
       //If no song is provided then your program will default to "The Sign" by Ace of Base.
+      if(!term){
+        term = "The Sign Ace of Base"
+      }
+      
        
       spotify.search({ type: 'track', query: term }, function(err, data) {
         if (err) {
@@ -50,12 +56,18 @@ function spotifyThis (){
 //for testing purposes only, replaced this with term after adding inquirer
 var movieName = "the matrix";
 
+//Code for OMDB that searches for what the user typed in 
 function movieThis(term){
+
+      //* If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.
+  if(!term){
+    term = "Mr. Nobody"
+  }
+  
 var queryURL = "http://www.omdbapi.com/?t=" + term + "&y=&plot=short&apikey=trilogy";
 
     axios.get(queryURL).then(
         function(movieResponse){
-          //* If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.
             console.log("Title: " + movieResponse.data.Title);
             console.log("Year: " + movieResponse.data.Year);
             console.log("Rated: " + movieResponse.data.imdbRating);
@@ -104,10 +116,18 @@ var queryURL = "http://www.omdbapi.com/?t=" + term + "&y=&plot=short&apikey=tril
 //   });
 // }
 
+//was added for testing purposes
 var artist = "ariana grande"
 
+//Code for bands in town that searches for concerts based on what the user types
 var getMyBands = function() {
+  if(!term){
+    term = "the 1975"
+  }
+
   var queryURL = 'https://rest.bandsintown.com/artists/' + term + '/events?app_id=codingbootcamp';
+
+ 
 
   axios.get(queryURL).then(
     function(response) {
@@ -137,11 +157,11 @@ var getMyBands = function() {
         throw err;
     }
     
-    console.log("Doing what it says!")
+    //console.log("Doing what it says!")
 
     // Invoke the next step here however you like
-    console.log(data);   // Put all of the code here (not the best solution)
-    processFile(data);          // Or put the next step in a function and invoke it
+    //console.log(data);   // Put all of the code here (not the best solution)
+    //processFile(data);          // Or put the next step in a function and invoke it
 });
 
 function processFile(data) {
@@ -149,6 +169,7 @@ function processFile(data) {
 }
 
 
+//Switch statement to determine which function the user wants
 switch (search){
   case 'do-what-it-says': 
     processFile(term)
